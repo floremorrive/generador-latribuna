@@ -212,6 +212,29 @@ function drawBadge(ctx, cfg, text){
   ctx.restore();
 }
 
+// Título (Rajdhani) + descripción (Inter Tight) con flujo dinámico:
+// la descripción va justo después del título, y si no cabe, se reduce la letra.
+function layoutTitleDesc(ctx, cfg, data){
+  const gap = cfg.titleGap != null ? cfg.titleGap : 44;
+  const bottom = cfg.textBottom || 1170;
+  const tLH = f => cfg.title.size * f * 1.02;
+  const dLH = f => cfg.desc.size * f * 1.20;
+  let f = 1;
+  for (let i = 0; i < 12; i++){
+    ctx.font = "700 " + (cfg.title.size * f) + "px 'Rajdhani'";
+    const tl = wrap(ctx, data.titulo, cfg.title.w).length;
+    ctx.font = "400 " + (cfg.desc.size * f) + "px 'Inter Tight'";
+    const dl = wrap(ctx, data.descripcion, cfg.desc.w).length;
+    const total = (tl - 1) * tLH(f) + gap + dl * dLH(f);
+    if (cfg.title.y + total <= bottom || f <= 0.6) break;
+    f -= 0.05;
+  }
+  const tEnd = paragraph(ctx, data.titulo, cfg.title.x, cfg.title.y, cfg.title.w,
+    "700 " + Math.round(cfg.title.size * f) + "px 'Rajdhani'", cfg.title.color, tLH(f));
+  paragraph(ctx, data.descripcion, cfg.desc.x, tEnd + gap, cfg.desc.w,
+    "400 " + Math.round(cfg.desc.size * f) + "px 'Inter Tight'", cfg.desc.color, dLH(f));
+}
+
 // ===== Plantilla estándar (foto arriba + bloque de texto) =====
 function renderStandard(ctx, cfg, data){
   // fondo (color plano o gradiente vertical)
@@ -243,13 +266,8 @@ function renderStandard(ctx, cfg, data){
     ctx.fillRect(cfg.accent.x, cfg.accent.y, cfg.accent.w, cfg.accent.h); }
   // badge
   drawBadge(ctx, cfg.badge, data.badge);
-  // titulo
-  const tFont = "700 " + cfg.title.size + "px 'Rajdhani'";
-  paragraph(ctx, data.titulo, cfg.title.x, cfg.title.y, cfg.title.w, tFont, cfg.title.color,
-            cfg.title.size * 1.02);
-  // descripcion
-  paragraph(ctx, data.descripcion, cfg.desc.x, cfg.desc.y, cfg.desc.w,
-            "400 " + cfg.desc.size + "px 'Inter Tight'", cfg.desc.color, cfg.desc.size * 1.2);
+  // título + descripción con flujo dinámico y auto-ajuste de tamaño
+  layoutTitleDesc(ctx, cfg, data);
   // logo
   drawLogo(ctx, cfg.logo);
 }
@@ -445,8 +463,10 @@ function renderQuePasaDorado(ctx, d){
   textureOverlays(ctx, 0.5 * FX.grano, 0.5 * FX.grunge);
   drawBadge(ctx, { x: 70, y: 700, style: "fill", bg: COLORS.dark, text: gold, size: 32,
                    line: { toX: 1020, thickness: 10, color: COLORS.dark } }, d.badge);
-  paragraph(ctx, d.titulo, 70, 860, 950, "700 60px 'Rajdhani'", COLORS.dark, 62);
-  paragraph(ctx, d.descripcion, 78, 1040, 900, "400 40px 'Inter Tight'", "#33302c", 48);
+  layoutTitleDesc(ctx, {
+    title: { x: 70, y: 860, w: 950, size: 60, color: COLORS.dark },
+    desc:  { x: 78, w: 900, size: 40, color: "#33302c" }, textBottom: 1170
+  }, d);
   drawLogo(ctx, COLORS.dark);
 }
 
