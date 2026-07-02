@@ -231,8 +231,10 @@ function layoutTitleDesc(ctx, cfg, data){
   }
   const tEnd = paragraph(ctx, data.titulo, cfg.title.x, cfg.title.y, cfg.title.w,
     "700 " + Math.round(cfg.title.size * f) + "px 'Rajdhani'", cfg.title.color, tLH(f));
-  paragraph(ctx, data.descripcion, cfg.desc.x, tEnd + gap, cfg.desc.w,
+  const dEnd = paragraph(ctx, data.descripcion, cfg.desc.x, tEnd + gap, cfg.desc.w,
     "400 " + Math.round(cfg.desc.size * f) + "px 'Inter Tight'", cfg.desc.color, dLH(f));
+  // límites del bloque de texto (para la línea de acento dinámica)
+  return { top: cfg.title.y - cfg.title.size * f * 0.74, bottom: dEnd + cfg.desc.size * f * 0.25 };
 }
 
 // ===== Plantilla estándar (foto arriba + bloque de texto) =====
@@ -261,13 +263,15 @@ function renderStandard(ctx, cfg, data){
   // texturas
   textureOverlays(ctx, (cfg.granoOp != null ? cfg.granoOp : 0.5) * FX.grano,
                        (cfg.grungeOp != null ? cfg.grungeOp : 0.4) * FX.grunge);
-  // linea de acento
-  if (cfg.accent){ ctx.fillStyle = cfg.accent.color;
-    ctx.fillRect(cfg.accent.x, cfg.accent.y, cfg.accent.w, cfg.accent.h); }
   // badge
   drawBadge(ctx, cfg.badge, data.badge);
   // título + descripción con flujo dinámico y auto-ajuste de tamaño
-  layoutTitleDesc(ctx, cfg, data);
+  const bounds = layoutTitleDesc(ctx, cfg, data);
+  // línea de acento dinámica: cubre desde el título hasta el final de la descripción
+  if (cfg.accent){
+    ctx.fillStyle = cfg.accent.color;
+    ctx.fillRect(cfg.accent.x, bounds.top, cfg.accent.w, bounds.bottom - bounds.top);
+  }
   // logo
   drawLogo(ctx, cfg.logo);
 }
@@ -277,10 +281,11 @@ const TEMPLATES = {
   "pasa-mundo": (ctx, d) => renderStandard(ctx, {
     bg: COLORS.dark, weaveAlpha: 0.02,
     photo: { x: 31, y: 0, w: 1021, h: 690 },
-    accent: { x: 100, y: 742, w: 9, h: 262, color: COLORS.gold },
+    accent: { x: 100, w: 9, color: COLORS.gold },
     badge: { x: 96, y: 1225, style: "border", bg: COLORS.gold, text: COLORS.gold, size: 28 },
-    title: { x: 146, y: 862, w: 850, size: 54, color: COLORS.cream },
-    desc:  { x: 154, y: 1040, w: 700, size: 36, color: COLORS.gold },
+    title: { x: 146, y: 830, w: 878, size: 56, color: COLORS.cream },
+    desc:  { x: 154, w: 872, size: 38, color: COLORS.gold },
+    textBottom: 1200,
     logo: "white"
   }, d),
 
@@ -356,7 +361,8 @@ const TEMPLATES = {
     duotone: { tintPct: 0.6, tint: "#9C3F34", grainOp: 0.45, grungeOp: 0.2 },   // filtro rojo + ruido
     badge: { x: 107, y: 1232, style: "border", bg: COLORS.cream, text: COLORS.cream, size: 28 },
     title: { x: 125, y: 800, w: 901, size: 60, color: COLORS.cream },
-    desc:  { x: 125, y: 1050, w: 829, size: 40, color: COLORS.cream },
+    desc:  { x: 125, w: 901, size: 40, color: COLORS.cream },
+    textBottom: 1200,
     logo: "white"
   }, d),
 
@@ -373,10 +379,11 @@ const TEMPLATES = {
     bgGradient: { top: "#814C44", bottom: "#69352E", y0: 690, y1: 1350 },
     weaveAlpha: 0.5, weaveDark: true,
     photo: { x: 0, y: 0, w: 1080, h: 690 }, duotone: { tintPct: 0.25, grainOp: 0.28 },
-    accent: { x: 108, y: 735, w: 8, h: 250, color: COLORS.dark },
+    accent: { x: 108, w: 8, color: COLORS.dark },
     badge: { x: 107, y: 1232, style: "border", bg: COLORS.cream, text: COLORS.cream, size: 28 },
     title: { x: 125, y: 800, w: 901, size: 60, color: COLORS.cream },
-    desc:  { x: 125, y: 1050, w: 829, size: 40, color: COLORS.cream },
+    desc:  { x: 125, w: 901, size: 40, color: COLORS.cream },
+    textBottom: 1200,
     logo: "white"
   }, d),
 
@@ -491,9 +498,18 @@ function renderCierre(ctx, d){
   ctx.drawImage(ASSETS.ltmono, 108, 150, lw, lh);
   // badge
   drawBadge(ctx, { x: 108, y: 590, style: "fill", bg: "#F2EDEA", text: "#8A4A3E", size: 28 }, d.badge);
-  // descripción grande + autor
-  paragraph(ctx, d.descripcion, 108, 720, 880, "400 60px 'Inter Tight'", COLORS.cream, 74);
-  paragraph(ctx, d.autor || "Autor", 108, 1010, 880, "400 40px 'Inter Tight'", COLORS.cream, 48);
+  // descripción grande (auto-ajuste) + autor fluye debajo
+  let f = 1;
+  const dLH = ff => 60 * ff * 1.22;
+  for (let i = 0; i < 12; i++){
+    ctx.font = "400 " + (60 * f) + "px 'Inter Tight'";
+    const dl = wrap(ctx, d.descripcion, 880).length;
+    if (720 + dl * dLH(f) <= 1130 || f <= 0.6) break;
+    f -= 0.05;
+  }
+  const dEnd = paragraph(ctx, d.descripcion, 108, 720, 880,
+    "400 " + Math.round(60 * f) + "px 'Inter Tight'", COLORS.cream, dLH(f));
+  paragraph(ctx, d.autor || "Autor", 108, dEnd + 74, 880, "400 40px 'Inter Tight'", COLORS.cream, 48);
   // web centrado abajo
   ctx.save();
   ctx.textAlign = "center"; ctx.textBaseline = "alphabetic"; ctx.fillStyle = COLORS.cream;
