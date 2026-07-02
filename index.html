@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Generador de imágenes · La Tribuna</title>
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link id="appcss" rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<header>
+  <h1>Generador de imágenes · <span>La Tribuna</span></h1>
+  <p>Elige categoría, escribe los textos, sube la foto y genera las piezas para Instagram y Facebook.</p>
+</header>
+
+<main>
+  <!-- Panel de formulario -->
+  <section id="form">
+    <label>Categoría
+      <select id="categoria"></select>
+    </label>
+    <label id="wrap-subcat" hidden>Tema (subcategoría)
+      <select id="subcategoria"></select>
+    </label>
+    <label id="wrap-plantilla" hidden>Plantilla
+      <select id="plantilla"></select>
+    </label>
+
+    <div class="foto-box">
+      <label>Foto ilustrativa
+        <input type="file" id="foto" accept="image/*">
+      </label>
+      <div class="foto-controls" hidden>
+        <label>Zoom <input type="range" id="zoom" min="1" max="3" step="0.01" value="1"></label>
+        <label>← Horizontal → <input type="range" id="posx" min="-400" max="400" step="1" value="0"></label>
+        <label>↑ Vertical ↓ <input type="range" id="posy" min="-400" max="400" step="1" value="0"></label>
+      </div>
+    </div>
+
+    <label id="wrap-highlights" hidden>Palabras a resaltar en rojo (separadas por coma)
+      <input type="text" id="highlights" placeholder="Ej: Carlos Gaviria, Sergio Fajardo">
+    </label>
+
+    <label id="wrap-badgetext" hidden>Categoría (texto del recuadro)
+      <input type="text" id="badgetext" placeholder="Ej: AGRO, ECONOMÍA...">
+    </label>
+
+    <label id="wrap-autor" hidden>Autor
+      <input type="text" id="autor" placeholder="Nombre del autor">
+    </label>
+
+    <fieldset>
+      <legend>Instagram</legend>
+      <label>Título <textarea id="ig-titulo" rows="2" placeholder="Título"></textarea></label>
+      <label>Descripción <textarea id="ig-desc" rows="3" placeholder="Descripción"></textarea></label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Facebook</legend>
+      <label class="check"><input type="checkbox" id="fb-igual" checked> Usar el mismo texto de Instagram</label>
+      <div id="fb-campos" hidden>
+        <label>Título <textarea id="fb-titulo" rows="2" placeholder="Título"></textarea></label>
+        <label>Descripción <textarea id="fb-desc" rows="3" placeholder="Descripción"></textarea></label>
+      </div>
+    </fieldset>
+
+    <button id="generar">⬇ Generar las 2 imágenes</button>
+  </section>
+
+  <!-- Panel de vista previa -->
+  <section id="preview">
+    <div class="tabs">
+      <button class="tab active" data-red="ig">Instagram</button>
+      <button class="tab" data-red="fb">Facebook</button>
+    </div>
+    <div class="canvas-holder">
+      <canvas id="lienzo" width="1080" height="1350"></canvas>
+    </div>
+  </section>
+</main>
+
+<script>
+  // Carga de scripts con cache-busting (evita que el navegador use versiones viejas en desarrollo)
+  ["js/data.js", "js/render.js", "js/app.js"].forEach(function(s){
+    var el = document.createElement("script");
+    el.src = s + "?_=" + Date.now();
+    el.async = false;
+    document.body.appendChild(el);
+  });
+</script>
+</body>
+</html>

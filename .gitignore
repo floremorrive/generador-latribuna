@@ -1,0 +1,10 @@
+# Archivos del sistema
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Artefactos de prueba
+sample/salida-*.png
+
+# Config local del editor
+.claude/

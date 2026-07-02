@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Muestra · PASA EN EL MUNDO · La Tribuna</title>
+<style>
+  @font-face { font-family:'Rajdhani'; font-weight:700; src:url('../assets/fonts/Rajdhani-Bold.ttf'); }
+  @font-face { font-family:'Rajdhani'; font-weight:500; src:url('../assets/fonts/Rajdhani-Medium.ttf'); }
+  @font-face { font-family:'Inter Tight'; font-weight:100 900; src:url('../assets/fonts/InterTight.ttf'); }
+  @font-face { font-family:'M PLUS 1p'; font-weight:500; src:url('../assets/fonts/MPLUS1p-Medium.ttf'); }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#555; display:flex; justify-content:center; padding:20px; }
+
+  /* Lienzo 1080x1350 (Instagram/Facebook 4:5) */
+  .canvas {
+    position:relative;
+    width:1080px; height:1350px;
+    background:#272624;
+    overflow:hidden;
+    font-family:'Inter Tight',sans-serif;
+  }
+  /* Textura diagonal sutil */
+  .canvas::before {
+    content:''; position:absolute; inset:0;
+    background:repeating-linear-gradient(45deg,
+      rgba(255,255,255,0.018) 0 2px, rgba(255,255,255,0) 2px 5px);
+    pointer-events:none;
+  }
+  /* Foto ilustrativa */
+  .foto {
+    position:absolute; left:31px; top:0; width:1021px; height:690px;
+    object-fit:cover;
+    box-shadow:0 4px 30px rgba(0,0,0,.4);
+  }
+  /* Capas de efecto: grano + grunge (overlays PNG con transparencia, sin blend-mode) */
+  .fx-grano {
+    position:absolute; inset:0; pointer-events:none;
+    background:url('../assets/img/fx-grano.png') center/cover;
+    opacity:.7;
+  }
+  .fx-grunge {
+    position:absolute; inset:0; pointer-events:none;
+    background:url('../assets/img/fx-grunge.png') center/cover;
+    opacity:.55;
+  }
+  /* Linea vertical dorada */
+  .accent {
+    position:absolute; left:100px; top:742px; width:9px; height:262px;
+    background:#C6A465;
+  }
+  /* Titulo */
+  .titulo {
+    position:absolute; left:146px; top:818px; width:850px;
+    font-family:'Rajdhani'; font-weight:700; font-size:54px; line-height:1.02;
+    color:#FAF4F2; text-transform:capitalize;
+  }
+  /* Descripcion */
+  .descripcion {
+    position:absolute; left:154px; top:1010px; width:700px;
+    font-family:'Inter Tight'; font-weight:400; font-size:36px; line-height:1.15;
+    color:#C6A465;
+  }
+  /* Badge de categoria */
+  .categoria {
+    position:absolute; left:96px; top:1225px;
+    border:2px solid #C6A465; color:#C6A465;
+    font-family:'Inter Tight'; font-weight:700; font-size:28px; letter-spacing:.5px;
+    padding:9px 20px 7px; line-height:1;
+  }
+  /* Logo */
+  .logo {
+    position:absolute; right:44px; top:1196px; width:214px; height:auto;
+  }
+  /* Lema */
+  .lema {
+    position:absolute; right:44px; top:1272px; width:214px; text-align:center;
+    font-family:'M PLUS 1p'; font-weight:500; font-size:11px; letter-spacing:2px;
+    color:#FAF4F2;
+  }
+  .lema b { font-weight:700; }
+</style>
+</head>
+<body>
+  <div class="canvas">
+    <img class="foto" src="foto-ejemplo.jpg" alt="">
+    <div class="fx-grano"></div>
+    <div class="fx-grunge"></div>
+    <div class="accent"></div>
+    <div class="titulo">Titulo</div>
+    <div class="descripcion">Descripcion</div>
+    <div class="categoria">PASA EN EL MUNDO</div>
+    <img class="logo" src="../assets/img/logo-latribuna-white-trim.png" alt="La Tribuna">
+    <div class="lema">En defensa <b>de Colombia</b></div>
+  </div>
+</body>
+</html>

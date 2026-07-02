@@ -1,0 +1,42 @@
+:root{
+  --bg:#1c1b1a; --panel:#2a2826; --panel2:#333029; --line:#403c37;
+  --txt:#f0ebe6; --muted:#a89f95; --gold:#C6A465; --terra:#914135;
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+body{margin:0;font-family:'Inter Tight','Segoe UI',sans-serif;background:var(--bg);color:var(--txt)}
+header{padding:18px 26px;border-bottom:1px solid var(--line)}
+header h1{margin:0;font-size:22px;font-weight:600}
+header h1 span{color:var(--gold)}
+header p{margin:4px 0 0;color:var(--muted);font-size:14px}
+
+main{display:flex;gap:24px;padding:24px;align-items:flex-start;flex-wrap:wrap}
+
+#form{flex:1 1 360px;max-width:460px;display:flex;flex-direction:column;gap:16px}
+#form label{display:block;font-size:13px;color:var(--muted);font-weight:500}
+#form select,#form textarea,#form input[type=file],#form input[type=text]{
+  width:100%;margin-top:5px;padding:9px 11px;border-radius:8px;border:1px solid var(--line);
+  background:var(--panel);color:var(--txt);font-family:inherit;font-size:15px;resize:vertical;
+}
+#form fieldset{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0;
+  display:flex;flex-direction:column;gap:10px;background:var(--panel)}
+#form legend{padding:0 8px;font-weight:600;color:var(--gold);font-size:14px}
+.foto-box{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;
+  display:flex;flex-direction:column;gap:10px}
+.foto-controls{display:flex;flex-direction:column;gap:6px}
+.foto-controls input[type=range]{width:100%}
+label.check{display:flex;align-items:center;gap:8px;color:var(--txt)}
+label.check input{width:auto;margin:0}
+
+#generar{margin-top:4px;padding:14px;border:0;border-radius:10px;background:var(--gold);
+  color:#221c10;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit}
+#generar:hover{filter:brightness(1.06)}
+#generar:disabled{opacity:.5;cursor:not-allowed}
+
+#preview{flex:1 1 380px;display:flex;flex-direction:column;align-items:center;gap:12px;position:sticky;top:16px}
+.tabs{display:flex;gap:6px}
+.tab{padding:8px 20px;border:1px solid var(--line);background:var(--panel);color:var(--muted);
+  border-radius:8px;cursor:pointer;font-family:inherit;font-size:14px;font-weight:600}
+.tab.active{background:var(--gold);color:#221c10;border-color:var(--gold)}
+.canvas-holder{width:min(430px,90vw)}
+#lienzo{width:100%;height:auto;border-radius:6px;box-shadow:0 8px 40px rgba(0,0,0,.5);display:block}
