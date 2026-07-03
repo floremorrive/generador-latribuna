@@ -118,22 +118,22 @@ function download(canvas, filename){
     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
   }, "image/png");
 }
-$("generar").addEventListener("click", async () => {
+// Genera y descarga UNA sola red con la plantilla y el texto actuales.
+async function generarRed(red){
   const off = document.createElement("canvas");
   off.width = 1080; off.height = 1350;
   const slug = (currentBadge() || "pieza").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-  await renderTemplate(off, state.plantilla, dataFor("ig"));
-  download(off, `${slug}-instagram.png`);
-  await new Promise(r => setTimeout(r, 400));
-  await renderTemplate(off, state.plantilla, dataFor("fb"));
-  download(off, `${slug}-facebook.png`);
-});
+  await renderTemplate(off, state.plantilla, dataFor(red));
+  download(off, `${slug}-${red === "ig" ? "instagram" : "facebook"}.png`);
+}
+$("gen-ig").addEventListener("click", () => generarRed("ig"));
+$("gen-fb").addEventListener("click", () => generarRed("fb"));
 
 // --- arranque ---
 (async function(){
-  $("generar").disabled = true;
+  $("gen-ig").disabled = true; $("gen-fb").disabled = true;
   await initAssets();
   refreshPlantillas();
   await render();
-  $("generar").disabled = false;
+  $("gen-ig").disabled = false; $("gen-fb").disabled = false;
 })();
