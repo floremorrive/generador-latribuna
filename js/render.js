@@ -327,7 +327,7 @@ const TEMPLATES = {
   "gen-blanco-terracota": (ctx, d) => renderStandard(ctx, {
     bg: COLORS.paper, weaveAlpha: 0.03, photoBacking: COLORS.terra,
     photo: { x: 35, y: 30, w: 1010, h: 665 },
-    accent: { x: 100, y: 790, w: 8, h: 225, color: COLORS.terra },
+    accent: { x: 100, w: 8, color: COLORS.terra },
     badge: { center: true, y: 672, style: "fill", bg: COLORS.terra, text: "#FFFFFF", size: 34 },
     title: { x: 146, y: 875, w: 880, size: 60, color: COLORS.dark },
     desc:  { x: 154, y: 1055, w: 850, size: 40, color: COLORS.terra },

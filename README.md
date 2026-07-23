@@ -4,6 +4,14 @@ Aplicación web para generar las piezas de redes sociales (Instagram y Facebook)
 **La Tribuna** a partir de plantillas por categoría. Cada nota produce 2 imágenes
 de **1080×1350** (una por red), con textos independientes.
 
+**App en línea:** https://floremorrive.github.io/generador-latribuna/
+
+## Documentación
+
+- **[Manual de uso](MANUAL-USO.md)** — para el equipo de redacción. Cómo generar las piezas.
+- **[Manual técnico](MANUAL-TECNICO.md)** — cómo está hecha y **cómo cambiar o agregar
+  plantillas sin rehacer la aplicación**.
+
 ## Cómo usarla
 
 1. Abrir la app en el navegador.
